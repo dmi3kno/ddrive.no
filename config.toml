@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://www.ddrive.no/"
 languageCode = "en-us"
 title = "Minimal"
 theme = "minimal"
