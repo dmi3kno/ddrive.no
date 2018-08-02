@@ -1,19 +1,19 @@
 baseURL = "https://www.ddrive.no/"
 languageCode = "en-us"
-title = "Minimal"
+title = "$d /drive"
 theme = "minimal"
-disqusShortname = "username" # delete this to disable disqus comments
-googleAnalytics = ""
+disqusShortname = "dmi3kno" # delete this to disable disqus comments
+googleAnalytics = "UA-123145620-1"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
-    author = "Calin Tataru"
-    description = "Personal blog theme powered by Hugo"
-    githubUsername = "#"
-    accent = "red"
+    author = "dmi3kno"
+    description = "Data, decisions and all things R"
+    githubUsername = "dmi3kno"
+    accent = "teal"
     showBorder = true
-    backgroundColor = "white"
-    font = "Raleway" # should match the name on Google Fonts!
+    backgroundColor = "whitesmoke"
+    font = "Roboto" # should match the name on Google Fonts!
     highlight = true
     highlightStyle = "foundation"
     highlightLanguages = ["r", "markdown", "python", "SQL", "rust"]
@@ -38,26 +38,26 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 # The list of available icons can be found at http://fontawesome.io/icons/
 
 [[menu.icon]]
-    url = "mailto:me@example.com"
+    url = "mailto:dperepolkin@yahoo.no"
     name = "envelope-o"
     weight = 1
 
 [[menu.icon]]
-    url = "https://github.com/username/"
+    url = "https://github.com/dmi3kno/"
     name = "github"
     weight = 2
 
 [[menu.icon]]
-    url = "https://twitter.com/username/"
+    url = "https://twitter.com/dmi3k/"
     name = "twitter"
     weight = 3
 
 [[menu.icon]]
-    url = "https://www.linkedin.com/in/username/"
+    url = "https://www.linkedin.com/in/dperepolkin/"
     name = "linkedin"
     weight = 4
 
 [[menu.icon]]
-    url = "https://www.stackoverflow.com/username/"
+    url = "https://stackoverflow.com/users/5440712/dmi3kno"
     name = "stack-overflow"
     weight = 5

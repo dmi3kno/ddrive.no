@@ -1,0 +1,12 @@
+---
+title: polite
+author: dmi3kno
+date: '2018-08-01'
+slug: polite
+categories: []
+tags:
+  - r
+  - package
+---
+
+## Basic information about the package and links

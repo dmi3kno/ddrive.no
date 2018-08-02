@@ -1,0 +1,10 @@
+#1 Redirect default Netlify subdomain to primary domain
+https://sharp-khorana-080c04.netlify.com/* https://www.ddrive.no/:splat 301!
+#1 These extra rules are required because HTTPS is not forced
+http://sharp-khorana-080c04.netlify.com/* https://www.ddrive.no/:splat 301!
+#2 Redirect default Netlify subdomain to primary domain
+https://ddrive.no/* https://www.ddrive.no/:splat 301!
+#2 These extra rules are required because HTTPS is not forced
+http://ddrive.no/* https://www.ddrive.no/:splat 301!
+#3 These extra rules are required because HTTPS is not forced
+http://www.ddrive.no/* https://www.ddrive.no/:splat 301!

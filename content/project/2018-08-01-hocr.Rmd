@@ -1,0 +1,16 @@
+---
+title: hocr
+author: dmi3kno
+date: '2018-08-01'
+slug: hocr
+categories: []
+tags:
+  - r
+  - package
+---
+
+## Basic information about the package and links
+
+<details><summary> A package summary</summary>
+<p> some details hidden </p>
+</details>
