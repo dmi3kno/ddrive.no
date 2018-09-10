@@ -2,7 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+.httr-oauth
 blogdown/
 Thumbs.db
 public/
 input/
+
