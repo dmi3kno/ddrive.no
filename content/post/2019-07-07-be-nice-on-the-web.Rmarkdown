@@ -1,0 +1,412 @@
+---
+title: 'Be nice on the web'
+author: dmi3kno
+date: '2019-07-07'
+slug: be-nice-on-the-web
+categories:
+  - blog
+tags:
+  - polite
+  - r
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  root.dir = rprojroot::find_rstudio_root_file(),
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(polite)
+library(rvest)
+library(robotstxt)
+library(ratelimitr)
+library(memoise)
+```
+
+## Web etiquette for R users
+
+From the early days, we teach our kids to behave decent around the table and to not grab food with their fingers. Yet, we somehow forget to tell the newcomers to the data community about the responsible web scraping practices. Today I want to talk to you about 4 of them. Here they are: 
+
+- Introduce yourself 
+- Ask for permission
+- Take slowly
+- Never ask twice
+
+### Introduce yourself (with a meaningful user-agent string)
+
+First, talk to your Junior Data Scientists about the user-agent string, before somebody else does! In the dark streets of the web, newcomers learn how to mislead the host to believe they are operating a popular web browser, or even several of them. People recommend each other downloading the list of "valid" user-agent strings and "rotating" them together with IP addresses. 
+
+Teach your junior colleagues to be proud about using R and never hesitate to declare it to the world. If you can't openly say who you are, you probably shouldn't be doing what you're about to do. Here’s an example of a sneaky, dishonest and intentionally misleading user-agent:
+
+```{r}
+user_agent = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_1  like Mac OS X; en-us)'
+```
+
+and another one which is perhaps more straightforward, allowing the host to contact the user and clarify any possible questions or concerns.
+
+```{r}
+user_agent = 'Dmytro Perepolkin https://ddrive.no; polite R package bot'
+```
+
+User-agent strings came to us along the bouncy journey of different web browser platforms and compatibitliy issues. Read [this hillariously horrifying encounter of the history of user-agent strings](https://webaim.org/blog/user-agent-string-history/) and gain some appreciation for how far(?) we have come on transparency and technology standards. 
+
+### Ask for permission (granted to you in robots.txt)
+
+Second principle is related to permissions. “Knock before you enter”. `robots.txt` is a special file usually found in the root folder of the website, regulating who gets to scrape where, how fast, and how often. There’s this old Roman saying: 
+
+> “Quod licet Iovi, non licet bovi”
+
+roughly translated as
+
+> “What is allowed to Internet Explorer is not necessarily allowed to Beautiful Soup”. 
+
+When you using a Python or R script to read html pages, you are no longer a web-browser user, even if you are using `decapitated` or `selenium` to access the website. It is within the user's responsibility to investigate what permissions apply to them. 
+
+I advise everyone to develop a habit of preceding the scraping function with an `if` statement, checking the path is in fact scrapeable. 
+
+```{r, message=FALSE, warning=FALSE, error=FALSE}
+url <- "https://www.google.com/search"
+
+if(robotstxt::paths_allowed(url))
+  xml2::read_html(url)
+```
+
+And in case of the google search page, it is NOT.
+
+### Take slowly (using a rate-limiter)
+
+Next principle is related to the speed at which the data is acquired. This is the area where we should be proud that “R is slooow”. I have seen geniuses setting up sophisticated parallelization to make R scrape faster. On the contrary,  you should attempt to make R run slower, using `ratelimitr` or a new adverb in the `purrr` family, called `slowly()`.
+
+Don’t just `lapply` the scraper function. Instead, use rate limiting to make sure you never overwhelm the host. 
+
+```{r, eval=FALSE}
+read_html_ltd <- ratelimitr::limit_rate(read_html)
+# or read_html_ltd <- purrr::slowly(read_html)
+
+lapply(urls, read_html_ltd)
+```
+
+I think it is fair to say that if you’re getting an HTTP status error code, which you need to google to understand, you’re doing something wrong.
+
+### Never ask twice (cache with memoise)
+
+Finally, it a good idea to cache everything you get from the server. Don’t live in a fear of accidentally terminating the webscraping session. Instead, check out the `memoise` package, which allows you to cache the function calls to memory or to disk. It is liberating to be certain that you just can restart your R session and pick up where you left off.
+
+```{r, eval=FALSE}
+read_html_ltd_m <- memoise::memoise(read_html_ltd)
+
+lapply(urls, read_html_ltd_m)
+```
+
+`memoise` is an adverb. It makes the function “remember” all previous calls together with respective arguments, so that if you make the same call again, results will retrieved from the cache, not the  server. Alternatively, you can serialize any R object to an RDS file and then retrieve it from there.
+
+## Introducing polite
+
+Today, I want to present you an R package called `polite`. It contains two main functions: “bow and scrape”, which implement these principles. The first one introduces you to the host and checks robots.txt for you. Should you ever need to change the path on the same server, you can simply `nod()` to it and carry on with your business. `scrape()`, on the other hand, is a wrapper over `httr::GET()` and it performs rate-limiting and memoisation. There’s also a helpful downloader called `rip()`.
+
+> “bow and scrape” do not only mean performing a traditional medieval greeting gesture, but also figuratively mean being polite, considerate and generally acting as a grown-up.
+
+Bob Rudis is one the vocal proponents of an online etiquette in the R community. If you have never seen his `robots.txt` file, you should definitely [check it out](https://rud.is/robots.txt)! 
+
+Lets look at his blog. We don't know how many pages will the gallery return, so we keep going until there’s no more “Older posts” button. 
+
+```{r}
+if(!dir.exists(here::here("input"))) dir.create(here::here("input"))
+if(!file.exists(here::here("input", "hrbrmstr_posts.csv"))){
+
+hrbrmstr_posts <- data.frame()
+url <- "https://rud.is/b/"
+session <- bow(url)
+
+while(!is.na(url)){
+  # make it verbose
+  # message("Scraping ", url)
+  
+  # nod and scrape
+  current_page <- session %>% 
+    nod(url) %>% 
+    scrape(verbose = TRUE)  
+
+  # extract post titles
+  hrbrmstr_posts <- current_page %>% 
+    html_nodes(".entry-title a") %>% 
+    polite::html_attrs_dfr() %>% 
+    rbind(hrbrmstr_posts)
+
+  # see if there's “Older posts” button
+  url <- current_page %>% 
+    html_node(".nav-previous a") %>% 
+    html_attr("href")
+} # end while loop
+
+readr::write_csv(hrbrmstr_posts, here::here("input", "hrbrmstr_posts.csv"))
+
+}
+
+hrbrmstr_posts <- readr::read_csv(here::here("input", "hrbrmstr_posts.csv"))
+hrbrmstr_posts
+
+
+```
+
+Note that I first `bow()` to the host and then simply `nod()` to the current scraping page inside the `while` loop. We organize the data into the tidy format and append it to our empty data frame. At the end we will discover that Bob has written over 560 blog articles, which I very much recommend anyone to check out.
+
+## Use your manners!
+
+Although `{polite}` is very nice when used in interactive mode, it might be too heavy-weight for being included into a package, especially if you want to keep number of dependencies to a minimum. The most recent addition to `polite` package is a `usethis`-like function to produce example script you can include in your own package. The only dependencies in the templated code are `httr`, `robotstxt` and `memoise`. Just type `polite::use_manners()` and implement your own webscraper that adheres to polite philosophy. The functions proposed by `polite` can serve as a drop-in replacements for very poplular `xml2::read_html()` and `base::download.file()`. If this script will become part of the package, user will have to document it with `roxygen2` and add `robotstxt`, `memoise` and `httr` to the package description. Let's have a closer look at the produced script.
+
+### Service functions
+
+First of all, null-coalescing operator. Please, note that this null-coalescing operator will mask the similar operator from `purrr`. The difference between `polite` implementation and that of `tidyverse` is that it also controls for zero-length vectors. If you are using it in a package, you dont need to export this function to your users and keep it internal.
+
+```{r}
+#' generated by polite::use_manners()
+#' null-coalescing operator. See purr for details.
+`%||%` <- function(lhs, rhs) {
+  if (!is.null(lhs) && length(lhs) > 0) lhs else rhs
+}
+```
+
+Second function is for polite fetching of `robots.txt`. This function is using `{memoise}` for caching the `robots.txt` content. It also checks delay rate stipulated in the file, and compares it against the delay set by the user, returning the `robots.txt` object in a structured list.
+
+```{r}
+#' generated by polite::use_manners()
+#' function to get robots.txt is structured form. Memoised
+polite_fetch_rtxt <- memoise::memoise(
+  function(..., user_agent, delay, verbose){
+  rt <- robotstxt::robotstxt(...)
+  delay_df <- rt$crawl_delay
+  crawldelays <- as.numeric(
+    delay_df[with(delay_df,useragent==user_agent),"value"]) %||%
+    as.numeric(delay_df[with(delay_df, useragent=="*"), "value"]) %||% 0
+
+  rt$delay_rate <- max(crawldelays, delay, 1)
+
+  if(verbose){
+    message("Bowing to: ", rt$domain)
+    message("There's ",nrow(delay_df),
+            " crawl delay rule(s) defined for this host.")
+    message("Your rate will be set to 1 request every ",
+            rt$delay_rate," second(s).")}
+
+  rt
+})
+```
+
+Third function checks user-defined url against the permissions in `robots.txt` and enforces relevant delay rate, returning not the full object, but rather only final verdict whether the user-requested `url` is scrapable by the proposed `user-agent`.
+
+```{r}
+#' generated by polite::use_manners()
+#' function to check url against robots.txt and enforce appropriate delay
+check_rtxt <-function(url, delay, user_agent, force, verbose){
+  url_parsed <- httr::parse_url(url)
+  host_url <- paste0(url_parsed$scheme, "://", url_parsed$hostname)
+  rt <- polite_fetch_rtxt(host_url, force=force, user_agent=user_agent,
+                          delay=delay, verbose=verbose)
+  is_scrapable <- rt$check(paths=url_parsed$path, bot=user_agent)
+
+  if(is_scrapable)
+    Sys.sleep(rt$delay_rate)
+  else
+    warning("robots.txt says this path is NOT scrapable for your user agent!")
+
+  is_scrapable
+}
+```
+
+Last two functions perform scraping and downloading.
+
+### Scraping
+
+This is relatively simple function for scraping the content of the web-page. It is envisaged as a drop-in replacement for `xml2::read_html()` (typically used in the context of `{rvest}`). All this function does is checking the `robots.txt` for permission and stipulated delay, then it sets `user-agent` to be used in the session and calls `httr::GET()`.
+
+```{r}
+#' generated by polite::use_manners()
+#' function that actually fetches response from the web
+polite_read_html <- memoise::memoise(
+            function(url, ..., delay = 5,
+            user_agent=paste0("polite ", getOption("HTTPUserAgent"), "bot"),
+            force = FALSE, verbose=FALSE){
+
+  if(!check_rtxt(url, delay, user_agent, force, verbose)){
+    return(NULL)
+  }
+
+  old_ua <-  getOption("HTTPUserAgent")
+  options("HTTPUserAgent"= user_agent)
+  if(verbose) message("Scraping: ", url)
+  res <- httr::GET(url, ...)
+  options("HTTPUserAgent"= old_ua)
+  httr::content(res)
+})
+```
+
+This function is very easy to use: just replace `read_html()` with `polite_read_html()` and that's it!
+
+### Ripping
+
+Last function is intended as a drop-in replacement for `download.file()`, but based on `polite` principles, plus a few useful defaults. Let's have a closer look.
+
+First of all `destfile` argument in the `polite_download_file` function is populated by a function that attempts to guess the file name either from url or from `content-disposition` in the host response. Another feature of this implementation is default mode set to `wb` (for binary files downloads). The function accepts `path` argument which allows specifying a destination folder for downloaded files. The function checks `robots.txt` for permission and delay settings, then creates a download folder (if necessary) and proceeds to downloading the file in the specified directory. The funciton returns the path to the newly downloaded file, in case you want to accumulate it for further processing and analysis.
+
+```{r}
+#' generated by polite::use_manners()
+#' attempts to determine basename from either url or content-disposition
+guess_basename <- function(x) {
+  destfile <- basename(x)
+  if(tools::file_ext(destfile)==""){
+    hh <- httr::HEAD(x)
+    cds <- httr::headers(hh)$`content-disposition`
+    destfile <- gsub('.*filename=', '', gsub('\\\"','', cds))
+  }
+  destfile %||% basename(x)
+}
+
+#' generated by polite::use_manners()
+#' downloads file to specified path 
+polite_download_file <- memoise::memoise(
+                  function(url, destfile=guess_basename(url), ...,
+                  quiet=!verbose, mode = "wb", path="downloads/",
+                  user_agent=paste0("polite ", getOption("HTTPUserAgent")),
+                  delay = 5, force = FALSE, overwrite=FALSE, verbose=FALSE){
+
+  if(!check_rtxt(url, delay, user_agent, force, verbose)) return(NULL)
+
+  if(!dir.exists(path)) dir.create(path)
+
+  destfile <- paste0(path, destfile)
+
+  if(file.exists(destfile) && !overwrite){
+    message("File ", destfile, " already exists!")
+    return(destfile)
+  }
+
+  old_ua <-  getOption("HTTPUserAgent")
+  options("HTTPUserAgent"= user_agent)
+  if(verbose) message("Scraping: ", url)
+  utils::download.file(url=url, destfile=destfile, 
+                       quiet=quiet, mode=mode, ...)
+  options("HTTPUserAgent"= old_ua)
+  destfile
+})
+
+```
+
+## Scraping with good manners
+
+```{r, message=FALSE, error=FALSE, warning=FALSE}
+library(rvest)
+library(tidyverse)
+```
+
+In this example, we want to download outlines of interest areas in Stavanger (a small city on the western coast of Norway) published by local municipality in the form of GeoJSON files. The files we want to download have similar keywords "52 hverdagsturer over hele Stavanger" (52 everyday trips over the whole Stavanger). We will be accessing the municipality website, and use search functionality to locate the files in the gallery (note the search string we are passing to the `query` parameter in `polite_read_html`). Since we don't know how many search pages will be returned, we will be searching for the "more" button (marked with "»" symbol). and saving away the links to individual trip pages.
+
+```{r}
+if(!dir.exists(here::here("input"))) dir.create(here::here("input"))
+if(!file.exists(here::here("input", "opencom_header_df.csv"))){
+
+  url <- "https://opencom.no/organization/a5828aa1-820f-4937-b704-579a53258a09"
+  
+  page <-1
+  theres_more <- TRUE
+  headers_df <- data.frame()
+  
+  while(theres_more){
+  
+    params <- list(q="52+hverdagsturer+over+hele+Stavanger", page=page)
+    raw_page <- polite_read_html(url, query=params, verbose = TRUE)
+    
+    last_bttn <- raw_page %>% 
+      html_nodes(".pagination-centered a") %>% 
+      html_text() %>% 
+      tail(1) 
+    
+    headers_df <- raw_page %>% 
+      html_nodes(".dataset-heading a") %>% 
+      polite::html_attrs_dfr() %>% 
+      rbind(headers_df)
+  
+    theres_more <-last_bttn == "»"
+    page <- page + 1
+  
+  }
+  
+  readr::write_csv(headers_df, here::here("input", "opencom_header_df.csv"))
+}
+
+headers_df <- readr::read_csv(here::here("input", "opencom_header_df.csv"))
+headers_df
+
+```
+
+Note that here, we are "growing" the data frame, which may not be recommended strategy in other situations.
+
+Next code section will visit every page (using web-addresses scraped above) and capture the download links for the GeoJSON files. It might a good idea to save "expensive" web-queried results to an `.RDS` file.
+
+```{r}
+if(!dir.exists(here::here("input")))dir.create(here::here("input"))
+if(!file.exists(here::here("input", "opencom_headers_json_df.rds"))){
+  
+  host <- paste0(url_parse(url)[["scheme"]],"://", url_parse(url)[["server"]])
+  
+  res <- headers_df %>% 
+    mutate(json_lnk=map_chr(paste0(host, href), 
+                            ~ polite_read_html(.x, verbose = TRUE) %>% 
+                              html_nodes(".resource-url-analytics") %>% 
+                              html_attr("href") %>% 
+                              keep(~str_detect(.x,"\\d+\\.json"))))
+  
+  readr::write_rds(res, here::here("input", "opencom_headers_json_df.rds"))
+}
+
+res <- readr::read_rds(here::here("input", "opencom_headers_json_df.rds"))
+res
+```
+
+Finally we iterate over links to GeoJSONs and download them to a default folder (downloads). Here, as you can see, typically tedious job of setting up `download.file` function is simplified fo 3 lines of code.
+
+```{r, eval=FALSE}
+res %>% 
+  pull(json_lnk) %>% 
+  walk(polite_download_file, path=here::here("input", "opencom_geojson", ""))
+```
+
+Let's use `{sf}` and `{ggplot}` to read, pre-process and visualize the maps of the areas recommended for the day trips in Stavanger. The outlines of the areas are stored as linestrings, not as polygons, so we will use `st_polygonize()` to complete the lines into the polygons.
+
+```{r, echo=FALSE, message=FALSE, error=FALSE}
+library(ggplot2)
+library(sf)
+library(ggmap)
+
+res_sf <- list.files(here::here("input", "opencom_geojson"), 
+                 pattern = "*json$", full.names = TRUE) %>% 
+  lapply(function(x)st_read(x, quiet=TRUE) %>% 
+           group_by(TUR=VEGLENKEADRESSE.ADRESSENAVN,
+                    TURNUM=VEGLENKEADRESSE.ADRESSEKODE) %>% 
+           summarise(N=n()) %>% 
+           st_polygonize() %>% 
+           st_collection_extract("POLYGON")) %>% 
+  {Reduce(rbind, .)}
+
+```
+
+Since `ggmap` with google tiles is now protected by API key, we will use free OpenStreetMap tiles to plot areas of recommended day tours in Stavanger. 
+
+```{r, fig.width=5, fig.height=7}
+svg_grid_map <- get_stamenmap(bbox = as.numeric(st_bbox(res_sf)), zoom = 12, maptype = "toner-lite")
+
+ggmap(svg_grid_map)+
+  geom_sf(data=res_sf, inherit.aes = FALSE, fill="forestgreen", alpha=0.2)
+
+#file.remove(here::here("input"))
+```
+
+## Webscraper manifesto
+
+I want to leave you with this [ethical webscraper manifesto](https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01). 
+
+And remember, the most polite behavior is to avoid scraping at all! The objective should never be to simply hoard the data, but to create insight and value in a polite and respectful manner.
+
