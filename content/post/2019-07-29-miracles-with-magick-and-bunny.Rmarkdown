@@ -59,7 +59,7 @@ Well, I had to put something together to help with this situation! Enter `bunny`
 library(bunny)
 ```
 
-As of today, `bunny` is only a few days old, but he's already got a tricks up his sleeve, one of which is information function similar in nature to `image_info()`, but for text. The function takes the string and a set of parameters you want to apply it with using `image_annotate()` (such as size, font, style, weight) and outputs a dataframe with one letter per row, showing width and height of every letter, as they would be printed individually, as well as kerning (distance between the letter) when the whole word/phrase is printed at once. 
+As of today, `bunny` is only a few days old, but he's already got a few tricks up his sleeve, one of which is information function similar in nature to `image_info()`, but for text. The function takes the string and a set of parameters you want to apply it with using `image_annotate()` (such as size, font, style, weight) and outputs a dataframe with one letter per row, showing width and height of every letter, as they would be printed individually, as well as kerning (distance between the letter) when the whole word/phrase is printed at once. 
 
 ```{r}
 ii <- bunny::image_annotate_info(text="GLAMOUR", size=180, font="Oswald", weight=700)
