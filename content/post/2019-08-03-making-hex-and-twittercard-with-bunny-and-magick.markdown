@@ -38,7 +38,7 @@ Let me introduce you a new package, which as of today has zero functions. In the
 
 I have an idea of pulling together functions that deal with manipulation of bounding boxes (hence the name) and geometries from [`hocr`](https://github.com/dmi3kno/hocr/) and [`bunny`](https://github.com/dmi3kno/bunny/). These functions clearly belong together and it is becoming difficult to maintain and manage certain duplication of functionality between these two packages. In `hocr` bounding boxes are used to describe location of the words on the OCR'ed page, while in `bunny` geometries are used for describing points, areas and lines plotted on images. There's enough overlap in functionality to find these helpful functions a new home.
 
-Since the package will be dealing with bounding boxes and rectangular geometries, I was thinking I could build a hex logo around a picture of a frame. Wooden frames are boring and after searching around internet I came across this beautiful picture of "finger frame", which I liked a lot. The picture has free licence. I think I am going to use it for my package logo. 
+Since the package will be dealing with bounding boxes and rectangular geometries, I was thinking I could build a hex logo around a picture of a frame. Wooden frames are boring and after searching around internet I came across this beautiful picture of "finger frame", which I liked a lot. The picture has [free licence](https://pixabay.com/illustrations/fantasy-fingers-scene-frame-4065903/). I think I am going to use it for my package logo. 
 
 
 ```r
