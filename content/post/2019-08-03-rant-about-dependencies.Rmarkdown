@@ -9,8 +9,6 @@ tags:
   - r
 ---
 
-This morning I have a rant about dependencies and, by extension, reflection on #tinyverse vs #tidyverse and #rstats vs #python.
-
 ## Modularity
 
 Dependencies in R are direct consequence of modularity. [#tinyverse](http://www.tinyverse.org/) will have to evolve as collection of few completely independent packages. Reducing dependencies means bundling more functions (especially utility functions) into one package. Once you did that, the benefits of continuing working on a well-tooled package vs. writing (and maintaining) a new copy of toolkit are completely not in favour of maverick developers. 
