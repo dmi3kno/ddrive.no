@@ -163,4 +163,62 @@ Reduce(c, img_lst) %>%
 
 What do you say @JennyBryan, can we use this as a package logo?
 
+## Animated twittercard
 
+This is what [Github says](https://help.github.com/en/articles/customizing-your-repositorys-social-media-preview) about the social media preview (aka. twittercard)
+
+> Your image should be a PNG, JPG, or GIF file under 1 MB in size. For the best quality rendering, we recommend keeping the image at 640 by 320 pixels. 
+
+Let's try and fit under 1 MB with animated logo. We probably will have to cut back on number of frames and compress quality further. If we leave 40px for border, that leaves us with 560x240 of "inner space" to play with. Let's try and scale down as well as resample the image stack we still have in the memory to fit under the size boundary.
+
+As with out example above, let's try and make prototype card for single frame. We will need to scale down the images to fit onto the card. 
+
+```{r}
+gap_card <- image_canvas_ghcard(width=640, height = 320, border = "40x40")
+
+image_composite(gap_card, 
+                image_resize(img_lst[[1]], "240x240", "Lanczos2"),
+                gravity = "East", offset = "+70+0") %>% 
+  image_annotate("Update your", font="Aller", size=30, color="#523456",
+                 gravity = "West", location="+50-30") %>% 
+  image_annotate("worldview!", font="Aller", size=33, weight=700, color="#523456",
+                 gravity = "West", location="+50-0") %>% 
+  image_annotate("install.packages('gapminder')", font="Ubuntu mono", size=15, color="#0f0a10",
+                 gravity = "West", location="+25+40") %>% 
+  image_border_ghcard(border = "40x40")
+  
+```
+
+This looks ok. I am not sure how big the file will be, so we will not be adding bells and whistles to the image (like address alternating between CRAN and Jenny's repo).
+
+Right now we have roughly 6-8 frames per single `gapminder` year (100 images for 12 observations). If we drop, say, every third image, things shouldn't go all that bad.  
+
+```{r}
+img_lst_down <- img_lst[seq_along(img_lst)%%3!=0]
+length(img_lst_down)
+
+gap_card_lst <- lapply(img_lst_down, function(img){
+  image_composite(gap_card, 
+                image_resize(img, "240x240", "Lanczos2"),
+                gravity = "East", offset = "+70+0") %>% 
+  image_annotate("Update your", font="Aller", size=30, color="#523456",
+                 gravity = "West", location="+50-30") %>% 
+  image_annotate("worldview!", font="Aller", size=33, weight=700, color="#523456",
+                 gravity = "West", location="+50-0") %>% 
+  image_annotate("install.packages('gapminder')", font="Ubuntu mono", size=15, color="#0f0a10",
+                 gravity = "West", location="+25+40") %>% 
+  image_border_ghcard(border = "40x40")
+})
+
+```
+So we just need to stich it all together and write to disk.
+
+```{r}
+Reduce(c, gap_card_lst) %>% 
+  image_animate() %>% 
+  image_write_gif(here::here("input", "animated_card.gif"), delay=0.1, progress=FALSE)
+file.info(here::here("input", "animated_card.gif"))$size
+```
+![](/post/2019-08-06-gganimate-your-hex_files/animated_card.gif)
+
+Yay! Spot on!
