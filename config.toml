@@ -5,6 +5,9 @@ theme = "minimal"
 disqusShortname = "dmi3kno" # delete this to disable disqus comments
 googleAnalytics = "UA-123145620-1"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+pygmentsCodeFences  = true
+pygmentsStyle       = "monokai"                    
+highlightStyle      = "default"
 
 [params]
     author = "dmi3kno"
@@ -14,9 +17,9 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     showBorder = true
     backgroundColor = "whitesmoke"
     font = "Roboto" # should match the name on Google Fonts!
-    highlight = true
-    highlightStyle = "foundation"
-    highlightLanguages = ["r", "markdown", "python", "SQL", "rust"]
+    #highlight = false
+    #highlightStyle = "github"
+    #highlightLanguages = ["r", "markdown", "python", "SQL", "rust", "Stan"]
 
 [[menu.main]]
     url = "/"

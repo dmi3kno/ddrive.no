@@ -1,0 +1,28 @@
+---
+title: Communicating uncertainty
+author: dmi3kno
+date: '2019-08-26'
+slug: communicating-uncertainty
+categories:
+  - blog
+tags:
+  - uncertainty
+  - decisions
+bibliography: 2019-08-26-communicating-uncertainty.bib
+link-citations: true
+---
+
+This blogpost will capture some of the notes and observations I had while reading [@van2019communicating].
+
+The article defines epistemic uncertainties pretty early in the text as:
+
+> ...uncertainties about factors, numbers and science due to limited knowledge or ignorance - so called epistemic uncertainty. Epistemic uncertainty generally, but not always, concerns past or present phenomena that we currently *don't know*, but could, at least in theory, know or establish. We may, for example, have epistemic uncertainty about future events that have no randomness attached to them but that we currently do not know (for example, presents that we might receive on our birthday that have already been bought: there is no aleatory uncertainty, only uncertainty caused by our lack of information, which will be updated when our birthday arrives). In this paper, we do not consider concepts that are not even theoretically knowable, such as non-identifiable parameters in statistical models, knowledge about counterfactual events or the existence of God.
+
+I have two problems with this definition:
+
+1) All uncertainties below the current study resolution are scooped to *aleatory*, along with counterfactuals about the future, which in my opinion, are the most interesting from Bayesian point of view. 
+2) Also uncertainties that are one decision away (e.g. not yet purchased presents) are also sorted out of the scope of this paper, which I find odd.
+
+These are just first thoughts. I might come back to the paper and provide more reflections on it. To be continued
+
+References:

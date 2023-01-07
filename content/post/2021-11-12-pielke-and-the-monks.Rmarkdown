@@ -1,0 +1,75 @@
+---
+title: Pielke and the monks
+author: Dmytro Perepolkin
+date: '2021-11-12'
+slug: pielke-and-the-monks
+categories:
+  - blog
+tags:
+  - decisions
+draft: yes
+bibliography: "`r rbbt::bbt_write_bib('2021-11-12-pielke-and-the-monks.bib', translator='bibtex', overwrite = TRUE)`"
+---
+
+## The role of the scientist
+
+The front page of the popular @pielke2007HonestBrokerMaking book has the following quote:
+
+> The role of the scientist is not to determine which risks are worth taking, or deciding what choices we should take, but the scientist must be involved in indicating what the possible choices, constraints and possibilities are . . . The role of the scientist is not to decide between the possibilities but to determine what the possibilities are.  
+>-- Lord May, 1990
+
+Translating this to the decision analysis language [@hammond2015SmartChoicesPractical; @matheson2005DecisionAnalysisDecision]: "It's not up to the scientist to make the final decision. But, the scientist must be involved in designing the alternatives". Well said. I am not sure it resonates well with the rest of the book, though.
+
+## The Honest Broker and his peers
+
+The central narrative of @pielke2007HonestBrokerMaking's book is centered around the four personas, representing the different perspectives on the role the scientists ought to play in the society and their involvement in setting the public policy (or other decision contexts). To help illustrate the point, @pielke2007HonestBrokerMaking tells us a story of tourist coming to town (I am going to switch perspective, compared to what Pielke does and say that that's you) and meeting the local resident (representing the scientist), who is asked to provide advice to the visitor.
+
+- *Pure Scientist* - having no interest in your decision making, this person wants to share some fundamental information about nutrition (apparently he happened to be expert on that), so he shares with you the official scientific report on the dietary guidelines, which describes the characteristics of a healthy diet. Moreover, your host believes that what you do with this information is entirely your responsibility. Pure scientist does not want to get involved in your decision making for two reasons: not to bias you (sounds like a caring act) and also not to bias themselves (which would affect their reputation if other scientists found out and could cloud their otherwise impartial judgement in researching future topics related to their domain of knowledge). For the purpose of my story I am going to call them *monks*, because their motivation is largely overlapping with the motivation of the ascetically minded heroes who believe that in order to achieve excellence (enlightenment?) they need to retract themselves from the imperfection of the world, dedicating their life to studying texts and exercising their craft.
+- *Science Arbiter* - like a hotel concierge this person is trying to be very helpful, but the only thing he can do is to state the facts and answer the questions you might ask (provided that you pose relevant questions). The Science Arbiter can answer any of your questions about the restaurants: their location and what food they serve, but he will never tell you what you ought to prefer. For the purpose of the story I am going to call these people *oracles*. They cite from the texts (or draw from their personal revelation) and can tell you the things you don't know (sometimes even about the future). They reveal the truth, but they take no responsibility for what you are going to do with it.
+- *Issue Advocate* - is likely to try and convince you to eat at a particular restaurant. The motivation for doing it might be different: genuine care (he really believes this place to be the best), delusion of omniscience (he thinks he knows what you need right now), or conflict of interest (his brother works there). The milder version of this *evangelist* would simply attempt to limit your choices, using persuasion and advocacy to drive you towars particular course of action, possibly even warning you of dire consequences which await if you do not follow his advice. He has an agenda and he is proud of it.
+- *Honest Broker* of policy alternatives - provides you with a list of all restaurants in the city, basic information on each, including cost, menu, location, and other information he believes might be relevant for making a decision. He, however, will refuse to reduce the scope of choices, which @pielke2007HonestBrokerMaking believes to be tantamount to deciding. Honest broker can subset the list of alternatives at your request, e.g. listing only the restaurants within the 5-min walk. Honest broker believes his calling is to present the whole breadth of choices allowing the decision maker to reduce it based on his preferences/values. Honest broker acts as a *rabbi*, who, when you ask for advice, brings out the Talmud and tends to answers a question with a question.
+
+So here we have it. @pielke2007HonestBrokerMaking offers us a monk, an oracle, an evangelist and a rabbi. What is missing in this list is a ... chaplain. Let me explain.
+
+Imagine that before leaving for your journey, you reach out to an old friend, whose opinion you value a lot. He is very good at asking insightful and truly meaningful questions. You come to him not because he knows everything, but because he is very structured, and, like a good librarian, able to point you in the right direction if you need more information. You start the discussion by mentioning the trip, but within one or two questions the discussion drifts to conceptual realm of purpose, experiences you might want to bring back from the trip and how it can contribute to achieving the goals you set for yourself. 
+
+- *Curia regis* - a "Decision Councillor". This trusted "citizen scientist" is able to not only provide the factual information or help the decision maker brainstorm the list of alternatives, but he can also assists the decision maker in setting the decision frame (and due to his trusted adviser status, to respectfully challenge the frame adopted by the decision maker). Similar to a religious *chaplain*, who aims for longer-term relationship with his client, the Decision Councillor has the chance of learning the values of the decision maker, either through the discussion or, by observing the choices made by the decision maker in the past. This enables him to anticipate the various relevant objectives and value metrics, including the "sensitive" aims that the decision maker might not be comfortable to spell out directly. For example, politicians might not be comfortable spelling out the objective of getting re-elected, government official might not want to admit that it is important for him to appropriate the full amount of the allotted funds, to avoid the budget cut next year; the company executive might not be comfortable admitting that they seek to boost to the share price, to maximize the value of their bonus shares. 
+
+This is where impartiality to the decision maker's system of values is critical (and, likely, difficult). Many philosophers of science discussed the separation of science from values, but I think this ideal gains a new meaning in the context of decision analysis. The scientist should be able to illuminate the decision problem regardless of the objectives involved. This includes helping the decision maker frame the problem appropriately, generate a wide set of creative doable alternatives. The range of alternatives should cover the opportunity space substantially well ("mild to wild"), so that the truly best course of action can be discovered within few iterations. The set of alternatives come as a direct consequence of the frame and values, and sometimes, key risks and concerns the decision maker might have (so specifying a good initial set might take a few iterations).
+
+
+## Structured decision making
+
+The contribution of science to the society is not limited to knowledge about the world. Equally (if not more) important is the scientific method, or the logically coherent way of acquiring the knowledge and reaching conclusions from available evidence. The history of science is not just a history of accumulation of scientific knowledge, but also that of evolution of scientific method. Complex decision making can benefit from structured and disciplined approach, prevalent in science and knowledge how to avoid decision pitfalls [@hammond1998HiddenTrapsDecision]. 
+
+In fact, the scientists have long called for structured approach to decision making, especially in complex and controversial decision settings [@gregory2012StructuredDecisionMaking]. There are two main frameworks for structured decision making, which can be traced back to the scientific contribution of two "fathers" of decision analysis - Howard Raiffa and Ron Howard. They have a lot in common, but also differ in some small detail and emphasis [@perepolkin2021EnvironmentalModelsWaterfowl]. 
+
+### Decision frame
+
+Both of the proposed frameworks emphasize the importance of the "decision frame", or definition of the problem. Here are alternative frames for the tourist decision (varying the decision scope):
+
+- Which restaurant should I pick for dinner? (original frame)
+- How should I spend this evening? (wider frame)
+- What experiences do I want to remember from this trip? (even wider frame).
+
+Whenever several stakeholders are involved, it might be useful to try changing the frame by adjusting the perspective (what would my partner say about this? what would be the best for the kids?). Depending on the adopted frame, the decision alternatives may vary. The wider the frame the more varied will be the choices.
+
+### Values
+
+One more important pre-requisite for generating good alternatives is the specification of the values (objectives).  @keeney1976DecisionsMultipleObjectives argue that alternatives are a consequence of well specified values. Depending on what you value (want more of) the set of choices might be different. The choice of an evening meal will be different for an outdoors adventurer, the cuisine connoisseur, the couch potato or a party person.
+
+## Frame and values
+
+The unique role that the Decision Councillor is able to play is to assist the decision maker in framing the decision. For example, the frame for the tourist visit decision might be set wider, where the objective might be to best organize the evening leisure time, where food is only one of the components, perhaps not the most important one. Is scope is set wider it might also include the need for accomodation. In that new frame the range of options might include a luxury hotel with room service, a couch-surfing arrangement and an apart-hotel with kitchenette. In all of these cases the need for nutrition can be satisfied without the choice of the restaraunt. Decision Councillor is involved early, so perphaps, the scope could be set as wide as choosing the vacation experience, where food choice is merely a consequence not worth spending much attention.
+
+
+
+## Policy and politics
+
+Pielke describes the frustration of the Pure Scientist, discovering that the official scientific report on the dietary guidelines he handed to you is mired in politics, because the authors were involved in the battle of interests between the food companies and other Issue Advocates seeking to shape the public opinion (thus serving as a front for the "stealth issue advocacy"). As if the matters were not already bad, the Pure Scientist discovers that there exist several other (alternative) dietary guides that have been peer reviewed and published in, perhaps not so prominent scientific journals. They focus on slightly different focus groups and target vegetarian, vegan and whatnot kind of diet, so depending of your preferences a different report might be more suitable, but the Pure Scientist, of course does not want to meddle with your preferences (the feared "V-word"), so he stuffs you with everything and quits angry and frustrated.
+
+
+To be continued...
+
+
+# References
